@@ -20,6 +20,7 @@ public class TaskProcessor {
         List<String> lines = Files.readAllLines(Config.FILE_PATH);
         for (String line : lines) {
             System.out.println(line);
+            System.out.println();
         }
     }
 
