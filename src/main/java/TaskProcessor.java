@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,18 @@ public class TaskProcessor {
         for (String line : lines) {
             System.out.println(line);
         }
+    }
+
+    public List<Task> readAll3() throws IOException {
+        List<Task> tasks = new ArrayList<>();
+        List<String> lines = Files.readAllLines(Config.FILE_PATH);
+        for (String line : lines) {
+            if (!line.isEmpty()) {
+                Task task = parser.parse(line);
+                tasks.add(task);
+            }
+        }
+        return tasks;
     }
 
     public boolean add(Task newTopic) {
@@ -69,6 +82,16 @@ public class TaskProcessor {
             }
         }
         readAll2();
+    }
+
+    public void deleteTask3(int line) throws IOException {
+        List<Task> tasks = readAll3();
+        new FileWriter(Config.FILE_PATH.toFile()).close();
+        tasks.remove(line);
+        for (Task task : tasks) {
+            add(task);
+        }
+
     }
 
 }

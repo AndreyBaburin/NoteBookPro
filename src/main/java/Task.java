@@ -5,13 +5,13 @@ public class Task {
 
     private String topic;
     private boolean isKnown;
-    public String datetimeAdded = dataNow();
+    public String datetimeAdded;
 
     public Task(){}
     public Task(String topic) {
         this.topic = topic;
         isKnown = false;
-       datetimeAdded = dataNow() + Config.SEPARATOR1;
+       this.datetimeAdded = dataNow();
     }
 
     public String dataNow() {
@@ -35,9 +35,9 @@ public class Task {
 
     @Override
     public String toString() {
-        return  topic + '\'' +
-                 isKnown +
-                 datetimeAdded + '\'';
+        return  topic + " - " +
+                 isKnown + " -" +
+                datetimeAdded;
     }
 
     public void setTopic(String topic) {

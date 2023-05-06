@@ -1,8 +1,6 @@
-import java.time.LocalDateTime;
 
 public class TaskStringParser {
     public Task parse(String source) {
-
         String[] parts = source.split(Config.SEPARATOR1);
 
         String title = parts[0];
@@ -22,6 +20,7 @@ public class TaskStringParser {
                 Config.SEPARATOR1 + " " +
                 input.getKnown() +
                 Config.SEPARATOR1 + " " +
-                input.getDatetimeAdded();
+                input.getDatetimeAdded() +
+                Config.SEPARATOR1;
     }
 }
