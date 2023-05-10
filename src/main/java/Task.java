@@ -36,7 +36,7 @@ public class Task {
     @Override
     public String toString() {
         return  topic + " - " +
-                 isKnown + " -" +
+                 isKnown + " - " +
                 datetimeAdded;
     }
 

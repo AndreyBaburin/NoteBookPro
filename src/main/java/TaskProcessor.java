@@ -2,6 +2,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,21 +11,13 @@ public class TaskProcessor {
 
     public List<Task> readAll() throws IOException {
         List<String> lines = Files.readAllLines(Config.FILE_PATH);
-
         return lines.stream()
                 .map(l -> parser.parse(l))
                 .collect(Collectors.toList());
     }
 
-    public void readAll2() throws IOException {
-        List<String> lines = Files.readAllLines(Config.FILE_PATH);
-        for (String line : lines) {
-            System.out.println(line);
-            System.out.println();
-        }
-    }
 
-    public List<Task> readAll3() throws IOException {
+    public List<Task> readAllTasks() throws IOException {
         List<Task> tasks = new ArrayList<>();
         List<String> lines = Files.readAllLines(Config.FILE_PATH);
         for (String line : lines) {
@@ -36,7 +29,7 @@ public class TaskProcessor {
         return tasks;
     }
 
-    public boolean add(Task newTopic) {
+    public boolean add(Task newTopic) throws IOException {
         String writableString = parser.toWritableString(newTopic) + System.lineSeparator();
         try {
             Files.writeString(Config.FILE_PATH, writableString, StandardOpenOption.APPEND);
@@ -47,52 +40,61 @@ public class TaskProcessor {
         }
     }
 
-    public void deleteTask(int line) throws IOException {
-        List<String> lines = Files.readAllLines(Config.FILE_PATH);
-        try {
-            lines.remove(line);
-            System.out.println("Тема удалена");
-            new FileWriter(Config.FILE_PATH.toFile()).close();
-            for (String newLine : lines) {
-                String[] split = newLine.split(Config.SEPARATOR1);
-                Task task = new Task(split[0]);
-                add(task);
+    public void addWithoutRepeat(Task newTopic) throws IOException {
+        if (readAllTasks().isEmpty()) {
+            add(newTopic);
+        } else {
+            HashMap<String,Task> tasksMap = new HashMap<>();
+            for (Task task : readAllTasks()) {
+                tasksMap.put(task.getTopic(), task);
             }
-        } catch (NumberFormatException nfe) {
-            System.out.println("Введите число");
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Темы с таким номером не существует");
-            System.out.println("\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (!tasksMap.containsKey(newTopic.getTopic())) {
+                add(newTopic);
+            } else {
+                System.out.println("Тема " + newTopic.getTopic() + " уже существует" );
+            }
         }
-        readAll2();
     }
 
-    public void deleteTask2(int line) throws IOException {
-        List<String> lines = Files.readAllLines(Config.FILE_PATH);
-        lines.remove(line);
-        System.out.println("Тема удалена");
+
+    public void deleteTaskByName(String name) throws IOException {
+        List<Task> tasks = readAllTasks();
+        Task delete = null;
         new FileWriter(Config.FILE_PATH.toFile()).close();
-        for (String newLine : lines) {
-            try {
-                Files.writeString(Config.FILE_PATH, newLine, StandardOpenOption.APPEND);
-                Files.writeString(Config.FILE_PATH, "\n", StandardOpenOption.APPEND);
-            } catch (IOException e) {
-                e.printStackTrace();
+        for (Task task : tasks) {
+            if (task.getTopic().equals(name)) {
+                delete=task; //ConcurrentModificationException
             }
         }
-        readAll2();
+            tasks.remove(delete);
+
+        for (Task task : tasks) {
+            add(task);
+        }
     }
 
-    public void deleteTask3(int line) throws IOException {
-        List<Task> tasks = readAll3();
+    public void deleteTaskByNumberLine(int line) throws IOException {
+        List<Task> tasks = readAllTasks();
         new FileWriter(Config.FILE_PATH.toFile()).close();
         tasks.remove(line);
         for (Task task : tasks) {
             add(task);
         }
-
     }
 
+    public void deleteTask(Task t) throws IOException {
+        List<Task> tasks = readAllTasks();
+        Task delete = null;
+        new FileWriter(Config.FILE_PATH.toFile()).close();
+        for (Task task : tasks) {
+            if (task.getTopic().equals(t.getTopic())) {
+                delete = task; //ConcurrentModificationException
+            }
+        }
+        tasks.remove(delete);
+
+        for (Task task : tasks) {
+            add(task);
+        }
+    }
 }

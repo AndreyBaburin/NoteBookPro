@@ -17,9 +17,9 @@ public class TaskStringParser {
     public String toWritableString(Task input) {
 
         return input.getTopic() +
-                Config.SEPARATOR1 + " " +
+                Config.SEPARATOR1 +
                 input.getKnown() +
-                Config.SEPARATOR1 + " " +
+                Config.SEPARATOR1 +
                 input.getDatetimeAdded() +
                 Config.SEPARATOR1;
     }

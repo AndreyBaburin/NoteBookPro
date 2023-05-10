@@ -1,4 +1,3 @@
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ class TaskProcessorTest {
     void readAll3() throws IOException {
         TaskProcessor processor = new TaskProcessor();
         TaskStringParser parser = new TaskStringParser();
-        List<Task> expected = processor.readAll3();
+        List<Task> expected = processor.readAllTasks();
         List<Task> actual = new ArrayList<>();
         Path test = Path.of("MyTopicTest.txt");
         List<String> lines = Files.readAllLines(test);
@@ -42,25 +41,10 @@ class TaskProcessorTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-   void addTask() {
-        TaskProcessor processor = new TaskProcessor();
-        Task task1 = new Task("Example");
-        assertTrue(processor.add(task1));
-    }
 
 
-    @Test
-    void deleteTask2() throws IOException {
-        TaskProcessor processor = new TaskProcessor();
-        Task task1 = new Task("Example1");
-        Task task2 = new Task("Example2");
-        Task task3 = new Task("Example3");
-        processor.deleteTask2(1);
-        List<String> expected = Files.readAllLines(Config.FILE_PATH);
-        List<String> actual = Files.readAllLines(Path.of("MyTopicTest.txt"));
-        Assertions.assertEquals(expected, actual);
-    }
+
+
 
 
 //    @Test

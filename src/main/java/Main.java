@@ -11,13 +11,19 @@ public class Main {
         Task task2 = new Task("Topic 2");
         Task task3 = new Task("Topic 3");
         Task task4 = new Task("Topic 4");
-        processor.add(task1);
-        processor.add(task2);
-        processor.add(task3);
-        processor.add(task4);
-        processor.readAll3().forEach(System.out::println);
-        processor.deleteTask3(2);
-
+        Task task5 = new Task("Topic 1");
+        processor.addWithoutRepeat(task1);
+        processor.addWithoutRepeat(task2);
+        processor.addWithoutRepeat(task3);
+        processor.addWithoutRepeat(task4);
+        processor.addWithoutRepeat(task5);
+        processor.readAllTasks().forEach(System.out::println);
+        System.out.println();
+        processor.deleteTaskByName("Topic 1");
+        processor.readAllTasks().forEach(System.out::println);
+        System.out.println();
+       processor.deleteTask(task2);
+        processor.readAllTasks().forEach(System.out::println);
     }
 
     private static void prepareFile() throws IOException {
