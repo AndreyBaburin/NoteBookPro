@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TaskProcessor {
+public class TaskProcessor implements TaskLogicProcessor {
     TaskStringParser parser = new TaskStringParser();
 
+    @Override
     public List<Task> readAll() throws IOException {
         List<String> lines = Files.readAllLines(Config.FILE_PATH);
         return lines.stream()
@@ -16,7 +17,7 @@ public class TaskProcessor {
                 .collect(Collectors.toList());
     }
 
-
+    @Override
     public List<Task> readAllTasks() throws IOException {
         List<Task> tasks = new ArrayList<>();
         List<String> lines = Files.readAllLines(Config.FILE_PATH);
@@ -29,6 +30,7 @@ public class TaskProcessor {
         return tasks;
     }
 
+    @Override
     public boolean add(Task newTopic) throws IOException {
         String writableString = parser.toWritableString(newTopic) + System.lineSeparator();
         try {
@@ -40,39 +42,41 @@ public class TaskProcessor {
         }
     }
 
+    @Override
     public void addWithoutRepeat(Task newTopic) throws IOException {
         if (readAllTasks().isEmpty()) {
             add(newTopic);
         } else {
-            HashMap<String,Task> tasksMap = new HashMap<>();
+            HashMap<String, Task> tasksMap = new HashMap<>();
             for (Task task : readAllTasks()) {
                 tasksMap.put(task.getTopic(), task);
             }
             if (!tasksMap.containsKey(newTopic.getTopic())) {
                 add(newTopic);
             } else {
-                System.out.println("Тема " + newTopic.getTopic() + " уже существует" );
+                System.out.println("Тема " + newTopic.getTopic() + " уже существует");
             }
         }
     }
 
-
+    @Override
     public void deleteTaskByName(String name) throws IOException {
         List<Task> tasks = readAllTasks();
         Task delete = null;
         new FileWriter(Config.FILE_PATH.toFile()).close();
         for (Task task : tasks) {
             if (task.getTopic().equals(name)) {
-                delete=task; //ConcurrentModificationException
+                delete = task; //ConcurrentModificationException
             }
         }
-            tasks.remove(delete);
+        tasks.remove(delete);
 
         for (Task task : tasks) {
             add(task);
         }
     }
 
+    @Override
     public void deleteTaskByNumberLine(int line) throws IOException {
         List<Task> tasks = readAllTasks();
         new FileWriter(Config.FILE_PATH.toFile()).close();
@@ -82,7 +86,7 @@ public class TaskProcessor {
         }
     }
 
-    public void deleteTask(Task t) throws IOException {
+    public void deleteTaskByName(Task t) throws IOException {
         List<Task> tasks = readAllTasks();
         Task delete = null;
         new FileWriter(Config.FILE_PATH.toFile()).close();

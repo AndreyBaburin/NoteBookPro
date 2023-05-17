@@ -7,11 +7,13 @@ public class Task {
     private boolean isKnown;
     public String datetimeAdded;
 
-    public Task(){}
+    public Task() {
+    }
+
     public Task(String topic) {
         this.topic = topic;
         isKnown = false;
-       this.datetimeAdded = dataNow();
+        this.datetimeAdded = dataNow();
     }
 
     public String dataNow() {
@@ -35,8 +37,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return  topic + " - " +
-                 isKnown + " - " +
+        return topic + " - " +
+                isKnown + " - " +
                 datetimeAdded;
     }
 

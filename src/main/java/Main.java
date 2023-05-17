@@ -22,7 +22,7 @@ public class Main {
         processor.deleteTaskByName("Topic 1");
         processor.readAllTasks().forEach(System.out::println);
         System.out.println();
-       processor.deleteTask(task2);
+        processor.deleteTaskByName(task2);
         processor.readAllTasks().forEach(System.out::println);
     }
 
