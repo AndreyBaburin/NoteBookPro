@@ -34,6 +34,10 @@ public class Task {
         return datetimeAdded;
     }
 
+    public void setDatetimeAdded(String datetimeAdded) {
+        this.datetimeAdded = datetimeAdded;
+    }
+
 
     @Override
     public String toString() {
@@ -48,9 +52,5 @@ public class Task {
 
     public void setKnown(boolean known) {
         isKnown = known;
-    }
-
-    public void setDatetimeAdded(String datetimeAdded) {
-        this.datetimeAdded = datetimeAdded;
     }
 }
